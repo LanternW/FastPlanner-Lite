@@ -1,0 +1,8 @@
+prefix=/home/lantern/ROS_workspace/MotionPlanning/install
+
+Name: globalmap_gene
+Description: Description of globalmap_gene
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

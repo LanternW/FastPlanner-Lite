@@ -1,0 +1,8 @@
+prefix=/home/lantern/ROS_workspace/MotionPlanning/install
+
+Name: cmake_utils
+Description: Description of cmake_utils
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

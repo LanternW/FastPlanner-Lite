@@ -1,0 +1,8 @@
+prefix=/home/lantern/ROS_workspace/MotionPlanning/install
+
+Name: pose_utils
+Description: Description of pose_utils
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lpose_utils
+Requires: 

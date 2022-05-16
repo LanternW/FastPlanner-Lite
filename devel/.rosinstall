@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/lantern/ROS_workspace/MotionPlanning/devel/setup.sh

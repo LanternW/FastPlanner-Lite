@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC   -O3 -DNDEBUG   -shared -Wl,-soname,libmap_manager_lib.so -o /home/lantern/ROS_workspace/MotionPlanning/devel/lib/libmap_manager_lib.so CMakeFiles/map_manager_lib.dir/src/Gridmap.cpp.o CMakeFiles/map_manager_lib.dir/src/PCSmap_manager.cpp.o 

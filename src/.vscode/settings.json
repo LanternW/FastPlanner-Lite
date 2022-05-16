@@ -1,0 +1,8 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/lantern/ROS_workspace/MotionPlanning/devel/lib/python2.7/dist-packages",
+        "/home/lantern/ROS_workspace/livox-driver-r2live/devel/lib/python2.7/dist-packages",
+        "/home/lantern/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ]
+}

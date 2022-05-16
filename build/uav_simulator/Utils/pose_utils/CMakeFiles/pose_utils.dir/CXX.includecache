@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lantern/ROS_workspace/MotionPlanning/src/uav_simulator/Utils/pose_utils/include/pose_utils.h
+iostream
+-
+armadillo
+/home/lantern/ROS_workspace/MotionPlanning/src/uav_simulator/Utils/pose_utils/include/armadillo
+
+/home/lantern/ROS_workspace/MotionPlanning/src/uav_simulator/Utils/pose_utils/src/pose_utils.cpp
+pose_utils.h
+/home/lantern/ROS_workspace/MotionPlanning/src/uav_simulator/Utils/pose_utils/src/pose_utils.h
+

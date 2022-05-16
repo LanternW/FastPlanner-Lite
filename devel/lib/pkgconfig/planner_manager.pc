@@ -1,0 +1,8 @@
+prefix=/home/lantern/ROS_workspace/MotionPlanning/devel
+
+Name: planner_manager
+Description: Description of planner_manager
+Version: 0.0.0
+Cflags: -I/home/lantern/ROS_workspace/MotionPlanning/devel/include -I/home/lantern/ROS_workspace/MotionPlanning/src/planner_manager/include
+Libs: -L${prefix}/lib -lplanner_manager
+Requires: map_manager planner_algorithm roscpp rospy std_msgs sensor_msgs geometry_msgs message_runtime
