@@ -1,8 +1,0 @@
-prefix=/home/lantern/ROS_workspace/MotionPlanning/install
-
-Name: planner_algorithm
-Description: Description of planner_algorithm
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: map_manager geometry_msgs roscpp rospy sensor_msgs std_msgs

@@ -1,8 +1,0 @@
-prefix=/home/lantern/ROS_workspace/MotionPlanning/devel
-
-Name: uav_utils
-Description: Description of uav_utils
-Version: 0.0.0
-Cflags: -I/home/lantern/ROS_workspace/MotionPlanning/src/uav_simulator/Utils/uav_utils/include
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy

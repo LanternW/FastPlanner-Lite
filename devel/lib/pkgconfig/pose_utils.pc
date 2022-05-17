@@ -1,8 +1,0 @@
-prefix=/home/lantern/ROS_workspace/MotionPlanning/devel
-
-Name: pose_utils
-Description: Description of pose_utils
-Version: 0.0.0
-Cflags: -I/home/lantern/ROS_workspace/MotionPlanning/src/uav_simulator/Utils/pose_utils/include
-Libs: -L${prefix}/lib -lpose_utils
-Requires: 

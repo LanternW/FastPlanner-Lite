@@ -1,8 +1,0 @@
-prefix=/home/lantern/ROS_workspace/MotionPlanning/install
-
-Name: so3_quadrotor_simulator
-Description: Description of so3_quadrotor_simulator
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: roscpp quadrotor_msgs uav_utils

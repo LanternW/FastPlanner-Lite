@@ -1,8 +1,0 @@
-prefix=/home/lantern/ROS_workspace/MotionPlanning/install
-
-Name: so3_control
-Description: Description of so3_control
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
