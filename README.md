@@ -17,7 +17,7 @@ catkin_make -DCMAKE_BUILD_TYPE=Release
 source devel/setup.bash
 ```
 ```
-roslaunch plan_manager run_in_sim.launch
+roslaunch planner_manager run_in_sim.launch
 ```
 ### ESDF可视化工具
 ```
