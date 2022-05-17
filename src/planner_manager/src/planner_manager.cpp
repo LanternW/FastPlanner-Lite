@@ -96,10 +96,15 @@ void PlannerManager::generateTraj( vector<Vector3d> path )
     index_gap = ceil( temp_traj_parlength / ((pcsmap_manager->occupancy_map) ->  grid_resolution) );
   }
 
+  double odom_vel_x = recent_odom.twist.twist.linear.x;
+  double odom_vel_y = recent_odom.twist.twist.linear.y;
+  double odom_vel_z = recent_odom.twist.twist.linear.z;
+  Vector3d odom_vel = Vector3d(odom_vel_x, odom_vel_y, odom_vel_z);
   bool ret_opt;
   MatrixXd initState  = MatrixXd::Zero(3,3);
   MatrixXd finalState = MatrixXd::Zero(3,3);
   initState.col(0)  = path.front();
+  initState.col(1)  = odom_vel;
   finalState.col(0) = path.back();
   initState(2,0) += 0.5;
   finalState(2,0) += 0.5;

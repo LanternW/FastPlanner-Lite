@@ -1,7 +1,7 @@
 <launch>
-  <arg name="init_x" value="1.0"/>
-  <arg name="init_y" value="1.0"/>
-  <arg name="init_z" value="1.0"/> 
+  <arg name="init_x" default="1.0"/>
+  <arg name="init_y" default="1.0"/>
+  <arg name="init_z" default="1.0"/> 
   <arg name="obj_num" value="1" />
   <arg name="map_size_x_"/>
   <arg name="map_size_y_"/>
@@ -45,8 +45,8 @@
   <node pkg="odom_visualization" name="odom_visualization" type="odom_visualization" output="screen">
         <remap from="~odom" to="$(arg odometry_topic)"/>
         <param name="color/a" value="1.0"/>    
-        <param name="color/r" value="0.0"/>        
-        <param name="color/g" value="0.0"/>        
+        <param name="color/r" value="1.0"/>        
+        <param name="color/g" value="1.0"/>        
         <param name="color/b" value="1.0"/>       
         <param name="covariance_scale" value="100.0"/>       
         <param name="robot_scale" value="1.0"/>

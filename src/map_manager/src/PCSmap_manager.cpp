@@ -8,7 +8,6 @@ PCSmapManager::PCSmapManager()
     recieved_globalmap = false;
     boundary_xyzmin = Vector3d(HUGE_NUMBER, HUGE_NUMBER, HUGE_NUMBER);
     boundary_xyzmax = Vector3d(-HUGE_NUMBER, -HUGE_NUMBER, -HUGE_NUMBER);
-
 }
 
 PCSmapManager::~PCSmapManager()
@@ -17,17 +16,13 @@ PCSmapManager::~PCSmapManager()
     occupancy_map -> releaseMemory();
 }
 
-
-
 void PCSmapManager::init(ros::NodeHandle& nh)
 {
     nh.param("occupancy_resolution", occupancy_resolution, 0.1);
     nh.param("sta_threshold", sta_threshold, 2);
     nh.param("debug_output", debug_output, true);
 
-
     occupancy_map.reset(new GridMap);
-
     occupancy_map->grid_resolution = occupancy_resolution;
     occupancy_map->debug_output    = debug_output;
 
@@ -50,6 +45,8 @@ void PCSmapManager::rcvOdomHandler(const nav_msgs::Odometry odom)
 
 void PCSmapManager::rcvRenderGrad(const std_msgs::Int16 msg)
 {
+    // $rosrun debug grad_viewer.py 
+    // press 'W' and 'S' to adjust the layer, press 'B' to start rendering.
     int layer_z = msg.data;
     if(layer_z < 0){layer_z = 0;}
     if(layer_z >= occupancy_map -> Z_size){layer_z = occupancy_map -> Z_size - 1;}
@@ -79,7 +76,6 @@ void PCSmapManager::rcvRenderGrad(const std_msgs::Int16 msg)
     pcl::toROSMsg( grad_vis_pcl, grad_vis);
     grad_vis.header.frame_id = "world";
     debug_grad_pub.publish(grad_vis);
-
 }
 
 void PCSmapManager::rcvGlobalMapHandler(const sensor_msgs::PointCloud2& globalmap)
@@ -97,7 +93,7 @@ void PCSmapManager::rcvGlobalMapHandler(const sensor_msgs::PointCloud2& globalma
     globalmap_vis.header.frame_id = "world";
     globalmap_vis_pub.publish(globalmap_vis);
 
-// STEP1 generate occupancy map by point cloud
+// STEP1 generate occupancy map using point cloud
     global_pointcloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::copyPointCloud(global_cloud, *global_pointcloud); //复制
     global_kdtree.setInputCloud(global_pointcloud);
@@ -152,10 +148,10 @@ void PCSmapManager::rcvGlobalMapHandler(const sensor_msgs::PointCloud2& globalma
                 if(occupancy_map -> grid_map[i][j][k] >= sta_threshold) {
                     
                     center_coord = occupancy_map -> getGridCubeCenter(i, j, k);
+#ifdef RENDER_OCCUPANCY
                     s_point.x    = center_coord(0);
                     s_point.y    = center_coord(1);
                     s_point.z    = center_coord(2);
-#ifdef RENDER_OCCUPANCY
                     gridmap_vis.push_back(s_point);
 #endif
                     occupancy_map -> grid_map[i][j][k] = 1; 
@@ -168,10 +164,12 @@ void PCSmapManager::rcvGlobalMapHandler(const sensor_msgs::PointCloud2& globalma
     ROS_INFO("generate occupancy map done!");
 
 //EX STEP visualize occupancy map
+#ifdef RENDER_OCCUPANCY
     sensor_msgs::PointCloud2  occupancy_map_vis;
     pcl::toROSMsg(gridmap_vis, occupancy_map_vis);
     occupancy_map_vis.header.frame_id = "world";
     gridmap_vis_pub.publish(occupancy_map_vis);
+#endif
 
 // STEP2 generate ESDF map
     occupancy_map -> generateESDF3d();

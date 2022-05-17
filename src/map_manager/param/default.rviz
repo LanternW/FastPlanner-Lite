@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1
       Splitter Ratio: 0.5
     Tree Height: 755
   - Class: rviz/Selection
@@ -50,13 +51,13 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 100
+      Plane Cell Count: 300
       Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 21.077499389648438
+        Max Value: 2.9512500762939453
         Min Value: 0
         Value: true
       Axis: Z
@@ -102,7 +103,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 1000
@@ -119,13 +120,13 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /scf_planner_node/path_vis
       Name: Path
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -133,7 +134,7 @@ Visualization Manager:
       Marker Topic: /scf_planner_node/traj_vis
       Name: traj
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -148,22 +149,6 @@ Visualization Manager:
       Enabled: true
       Marker Topic: /vis_p
       Name: des_p
-      Namespaces:
-        "": true
-      Queue Size: 100
-      Value: true
-    - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /diablo_model
-      Name: fake_model
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: true
-    - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /scf_planner_node/surfel_map_vis
-      Name: SurfelMap
       Namespaces:
         {}
       Queue Size: 100
@@ -220,7 +205,7 @@ Visualization Manager:
       Max Intensity: 2944.075927734375
       Min Color: 0; 0; 0
       Min Intensity: -1209.1463623046875
-      Name: grad_vis
+      Name: ESDF_VIS
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -235,7 +220,7 @@ Visualization Manager:
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /odom_visualization/robot
-      Name: Marker
+      Name: UAV
       Namespaces:
         mesh: true
       Queue Size: 100
@@ -270,25 +255,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.470523834228516
+      Distance: 20.31792449951172
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 18.513822555541992
-        Y: 11.151826858520508
-        Z: 4.671404838562012
+        X: 11.406551361083984
+        Y: 5.782912254333496
+        Z: -1.8603572845458984
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7247968912124634
+      Pitch: 0.7797967791557312
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.798103332519531
+      Yaw: 4.548104763031006
     Saved: ~
 Window Geometry:
   Displays:

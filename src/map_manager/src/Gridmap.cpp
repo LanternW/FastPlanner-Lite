@@ -24,13 +24,25 @@ void GridMap::releaseMemory()
 		for (int y = 0; y < Y_size; y++)
 		{
 			delete [] grid_map[x][y];
+            delete [] grid_map_buffer_neg[x][y];
+            delete [] grid_map_buffer_all[x][y];
+            delete [] grid_map_flags[x][y];
+            delete [] grid_esdf[x][y];
 		}
 	}
 	for (int x = 0; x < X_size; x++)
 	{
 		delete [] grid_map[x];
+        delete [] grid_map_buffer_neg[x];
+        delete [] grid_map_buffer_all[x];
+        delete [] grid_map_flags[x];
+        delete [] grid_esdf[x];
 	}
 	delete [] grid_map;
+    delete [] grid_map_buffer_neg;
+    delete [] grid_map_buffer_all;
+    delete [] grid_map_flags;
+    delete [] grid_esdf;
 }
 
 

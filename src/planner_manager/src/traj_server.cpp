@@ -9,9 +9,8 @@
 #include "visualization_msgs/Marker.h"
 using namespace Eigen;
 
-ros::Publisher despoint_vis_pub;
-ros::Publisher despoint_pub;
-ros::Publisher control_cmd_pub;
+ros::Publisher despoint_vis_pub;    // desire pos visualization
+ros::Publisher control_cmd_pub;     // /pos_cmd to UAV
 
 double dt = 0.1;
 double t_cur;
@@ -66,12 +65,14 @@ void rcvOdomCallBack(nav_msgs::OdometryPtr msg)
   odometry_vel[1] = msg->twist.twist.linear.y;
   odometry_vel[2] = msg->twist.twist.linear.z;
 
-  Eigen::Quaterniond q( msg->pose.pose.orientation.w,
-			                  msg->pose.pose.orientation.x,
-		                  	msg->pose.pose.orientation.y,
-		                  	msg->pose.pose.orientation.z );
-  Eigen::Matrix3d R(q);
-  odometry_yaw = atan2(R.col(0)[1],R.col(0)[0]);
+  // Optional
+
+  // Eigen::Quaterniond q( msg->pose.pose.orientation.w,
+	// 		                  msg->pose.pose.orientation.x,
+	// 	                  	msg->pose.pose.orientation.y,
+	// 	                  	msg->pose.pose.orientation.z );
+  // Eigen::Matrix3d R(q);
+  // odometry_yaw = atan2(R.col(0)[1],R.col(0)[0]);
   
 }
 
@@ -146,8 +147,6 @@ void cmdCallback(const ros::TimerEvent &e)
 
       tempRenderAPoint(des_pos, Vector3d(0.1,0.2,0.9) );
     
-      
-
       control_cmd_pub.publish(cmd);
     }
 
@@ -172,8 +171,6 @@ void cmdCallback(const ros::TimerEvent &e)
 }
 
 
-
-
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "traj_server");
@@ -182,7 +179,6 @@ int main(int argc, char **argv)
   ros::Subscriber traj_sub      = nh.subscribe("trajectory_topic", 10, polynomialTrajCallback);
   ros::Subscriber odom_sub      = nh.subscribe("odom", 1, rcvOdomCallBack );
 
-  despoint_pub      = nh.advertise<geometry_msgs::PoseStamped>("despoint", 20); 
   despoint_vis_pub  = nh.advertise<visualization_msgs::Marker>("point/vis", 20); 
   control_cmd_pub   = nh.advertise<planner_manager::PositionCommand>("controller_cmd", 20); 
 

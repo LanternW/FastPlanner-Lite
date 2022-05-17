@@ -31,6 +31,7 @@ class GridMap
     public:
         void clearGridMap();
         void releaseMemory();
+        // all parameters can be set to const& type
         void createGridMap(Vector3d boundary_xyzmin, Vector3d boundary_xyzmax);
         bool isInMap(Vector3d pos_w);
         bool isIndexValid(Vector3i index);
@@ -46,14 +47,16 @@ class GridMap
 
         bool isGridBoundOfObs(Vector3i index); //return true while the grid is on the boundary of a obstacle.
         int getVoxelNum(int dim);
+        
+        //to generate ESDF map from occupancy map
         void clearGridESDF();
         template <typename F_get_val, typename F_set_val>
         void fillESDF(F_get_val f_get_val, F_set_val f_set_val, int start, int end, int dim);
         void generateESDF3d();
+        //
 
         double getGridSDFValue(Vector3i index);
         double getGridSDFValue(int ix, int iy, int iz);
-
         inline double getSDFValue(Vector3d pos_w)
         {
             /* use trilinear interpolation */
@@ -140,21 +143,20 @@ class GridMap
         // map resolution
         double grid_resolution;
 
-
-        // debug
+        // debug switch
         bool debug_output;
     
-
-
+        // occupancy map and its ESDF map
         double*** grid_map; 
         double*** grid_esdf; 
 
-        // for esdf map generation
+        // for esdf map generation, temp buffer
         double*** grid_map_buffer_neg; 
         double*** grid_map_buffer_all; 
         double*** grid_esdf_buffer1; 
         double*** grid_esdf_buffer2; 
         
+        // a flag for custom usage.
         bool*** grid_map_flags;
     
     public:
@@ -189,7 +191,6 @@ class PCSmapManager
         double occupancy_resolution;
 
         // some params
-
         // point count threshold while generating occupancy grid map using point cloud
         int sta_threshold;
 

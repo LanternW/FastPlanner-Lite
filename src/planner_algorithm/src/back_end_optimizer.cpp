@@ -283,7 +283,7 @@ bool TrajOpt::grad_cost_p(const Eigen::Vector3d& p,
   double sdf_value = 0 ;
   Eigen::Vector3d gp(Eigen::Vector3d::Zero());
 
-  double truncation = 2.0;
+  double truncation = pok;
 
   costp = 0;
   gradp = Eigen::Vector3d::Zero();

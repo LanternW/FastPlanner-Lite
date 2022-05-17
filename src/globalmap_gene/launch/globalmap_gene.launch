@@ -1,10 +1,16 @@
 <launch>
-
+<arg name="map_id" default="1"/>
+<arg name="init_x" default="1.0" />
+<arg name="init_y" default="1.0" />
+<arg name="init_z" default="1.0" />
 
     <node pkg="globalmap_gene" name="globalmap_gene_node" type="globalmap_gene_node" output="screen">
-    	<param name="cloud_resolution" value="0.004"/>
-
-        <remap from="/globalmap" to="/globalmap"/>
+    	<param name="cloud_resolution" value="0.07"/>
+        <param name="map_id" value="$(arg map_id)" />
+        <param name="init_x" value="$(arg init_x)" />
+        <param name="init_y" value="$(arg init_y)" />
+        <param name="init_z" value="$(arg init_z)" />
+        <remap from="~globalmap" to="/globalmap"/>
         <!--remap from="/globalmap" to="/camera/depth_registered/points"/-->
 
     </node>

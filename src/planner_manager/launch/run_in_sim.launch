@@ -1,23 +1,29 @@
 <launch>
 
 <arg name="odom_topic" default="/odom"/>
+<arg name="init_x" value="2.0" />
+<arg name="init_y" value="1.0" />
+<arg name="init_z" value="1.0" />
 
 
-<!-- pcs_map manager -->
+<!-- planner -->
 	<node pkg="planner_manager" name="scf_planner_node" type="scf_planner_node" output="screen">
 
 	  <param name="occupancy_resolution" value="0.2"/>
 	  <param name="sta_threshold"   value="1"/>
 	  <param name="debug_output"   value="false"/>
-
-	  <param name="traj_parlength"   value="1.5"/>
-
+	  
+	  <!-- the distance between each neighboring waypoint of MINCO traj initalization -->
+	  <param name="traj_parlength"   value="1.5"/>		
+	  
+	  <!-- number of samples in each traj segment  -->
 	  <param name="optimization/K"     value="8"  		/>
-	  <param name="optimization/pok"   value="0.3"		/>
-	  <param name="optimization/vmax"  value="2.0" 		/>
+	  <!-- esdf turcation distance -->
+	  <param name="optimization/pok"   value="1.0"		/>
+	  <!-- UAV Dynamic -->
+	  <param name="optimization/vmax"  value="3.0" 		/>
 	  <param name="optimization/amax"  value="5.0"		/>
-	  <param name="optimization/vmaxz" value="0.2"		/>
-	  <param name="optimization/amaxz" value="0.4"		/>
+	  <!-- weight -->
 	  <param name="optimization/rhoT"  value="1000.0"	/>
 	  <param name="optimization/rhoP"  value="10000.0"/>
 	  <param name="optimization/rhoV"  value="1000.0"	/>
@@ -40,7 +46,6 @@
 
 	  <remap from="~trajectory_topic"     	to="/trajectory" />
 	  <remap from="~odom" 					to="$(arg odom_topic)" />
-	  <remap from="~despoint" 				to="/des_p" />
 	  <remap from="~point/vis"  			to="/vis_p" />
 	  <remap from="~controller_cmd"  		to="/planning/pos_cmd" />
 
@@ -49,10 +54,18 @@
 <!-- use simulator -->
 	<include file="$(find planner_manager)/launch/simulator.xml">
 		<arg name="odometry_topic" value="$(arg odom_topic)" />
+		<arg name="init_x" value="$(arg init_x)" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
 	</include>
 
 <!-- use program code globalmap generator -->
-	<include file="$(find globalmap_gene)/launch/globalmap_gene.launch"/>
+	<include file="$(find globalmap_gene)/launch/globalmap_gene.launch">
+		<arg name="map_id" value="1" />
+		<arg name="init_x" value="$(arg init_x)" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+	</include>
 
 
 <!-- rviz -->

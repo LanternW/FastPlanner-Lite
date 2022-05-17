@@ -12,6 +12,8 @@
 
 ros::Publisher global_map_pub;
 double cloud_resolution;
+int map_id;
+double init_x, init_y, init_z;
 pcl::PointCloud<pcl::PointXYZ> global_map_pcl_cloud;
 
 using namespace Eigen;
@@ -167,112 +169,61 @@ void geneSpiral3D(double center_x, double center_y, double ori_z, double end_z, 
 
 void map1Gene()
 {
-    geneWall(0,-0.3, 10, 13.5, 0.1);
-
-    geneWall(0,3,0.95, 4, 3, 1.0);
+    int tree_number = 280;
+    double x,y;
+    geneWall(0,0, 0.2, 0.2, 3.0);
+    geneWall(60,60, 0.2, 0.2, 3.0);
+    while(tree_number--)
+    {
+        x = (rand() % 3000) / 50.0 ;
+        y = (rand() % 3000) / 50.0 ;
+        if( sqrt((x - init_x)*(x - init_x) + (y - init_y)*(y - init_y)) < 0.09){
+            tree_number++;
+            continue;
+        } 
+        else{
+            geneWall(x,y, 0.2, 0.2, 3.0);
+        }
+    }
     
-
-    geneWall(0,0, 1.9 ,8, 2, 0.1);
-    geneWall(0,2, 1.9 ,5, 11.5, 0.1);
-
-
-    geneTrangle(5,2, 2.0,2.0,8.0);
-    
-    geneWall(0,0, 3.9 ,8, 2, 0.1);
-    //geneWall(0,2, 4.0 ,5, 10, 0.1);
-    geneTrangle(1,2,2.0, 2.0,2.0,8.0);
-
-    geneTrangle(5,2,4.0, 2.0,2.0,8.0);
-    geneWall(0,0, 5.9 ,8, 2, 0.1);
-    geneWall(3,2, 3.9 ,2, 10, 0.1);
-    geneWall(5,10, 3.9 ,2, 2, 0.1);
-
-    geneWall(0,0, 8.0 ,0.1, 0.1, 0.1);
-
-    geneWall(5.0 ,2.0,0.1,8.0,4.0);
-    geneWall(7.0 ,2.0,0.1,8.0,2.0);
-
-    geneWall(1.0 ,2.0,2.0, 0.1,8.0,2.0);
-    geneWall(3.0 ,2.0,2.0, 0.1,8.0,2.0);
-    
-
-
-    //geneTrangle(3,4, 2.0,2.0,6.0);
-
-    //geneTrangle(1,6, 2.0,2.0,4.0);
 }
 
 void map2Gene()
 {
-    geneWall(0,0, 20, 15, 0.1);
-
-    //geneWall(0,0, 9.9 ,11, 6, 0.1);
-
-    //geneSpiral3D(3,3,0,15, 1.5,2, 2);
-    //geneSpiral3D(13,3,0,15, 1.5,2, 2);
-    geneSpiral3D(7,8,0,12.4, 1.5,2, 2);
-
-    geneWall(0,0, 21.0 ,0.1, 0.1, 0.1);
-
-
-    geneWall(6.11, 9.4, 12.3 ,10.0, 2.0, 0.1);
-
+    int tree_number = 180;
+    double x,y;
+    geneWall(0,0, 0.2, 0.2, 3.0);
+    geneWall(60,60, 0.2, 0.2, 3.0);
+    while(tree_number--)
+    {
+        x = (rand() % 1500) / 50.0 ;
+        y = (rand() % 1500) / 50.0 ;
+        if( sqrt((x - init_x)*(x - init_x) + (y - init_y)*(y - init_y)) < 0.09){
+            tree_number++;
+            continue;
+        } 
+        else{
+            geneWall(x,y, 0.2, 0.2, 3.0);
+        }
+    }
 }
 
 void map3Gene()
 {
-    geneSinPlane(0,0, -1.2, 15, 15, 1.5,0.6);
-    geneWall(0,0, 6.0 ,0.1, 0.1, 0.1);
+
 }
 
 void map4Gene()
 {
-    geneWall(0,0, 30, 35, 0.1);
-    geneWall(0,0, 21.0 ,0.1, 0.1, 0.1);
-
-    for(int i = 1 ; i < 29 ; i += 8)
-    {
-        geneRoad(Vector3d(i,0,3), Vector3d(i,35,3), 2.0);
-
-        if(i <= 10)
-        {
-            geneRoad(Vector3d(i+1,5,3), Vector3d(i+12,5,6), 2.0);
-            geneRoad(Vector3d(i+1,15,3), Vector3d(i+12,15,6), 2.0);
-            geneRoad(Vector3d(i+1,25,3), Vector3d(i+12,25,6), 2.0);
-        }
-    }
-    for(int i = 6 ; i < 29 ; i += 8)
-    {
-        geneRoad(Vector3d(i,0,6), Vector3d(i,35,6), 2.0);
-    }
-    for(int i = 1 ; i < 35 ; i += 16)
-    {
-        geneRoad(Vector3d(0,i,3), Vector3d(30,i,3), 2.0);
-
-        if(i < 32){
-            geneRoad(Vector3d(5,i+13,0), Vector3d(5,i+1,3), 2.0);
-            geneRoad(Vector3d(15,i+13,0), Vector3d(15,i+1,3), 2.0);
-            geneRoad(Vector3d(10,i+13,0), Vector3d(10,i+1,3), 2.0);
-            geneRoad(Vector3d(20,i+13,0), Vector3d(20,i+1,3), 2.0);
-            geneRoad(Vector3d(0,i,6), Vector3d(30,i,6), 2.0);
-        }
-    }
+    
 }
 
 void map5Gene()
 {
-    geneWall(0,0, 17, 10, 0.1);
+    geneWall(0,0, 20, 15, 0.1);
+    geneSpiral3D(7,8,0,12.4, 1.5,2, 2);
     geneWall(0,0, 21.0 ,0.1, 0.1, 0.1);
-
-    for(int i = 1 ; i < 5; i += 5)
-    {
-        geneRoad(Vector3d(i+16,0,3), Vector3d(i+16,10,3), 2.0);
-        if(i < 10){
-            geneRoad(Vector3d(i+1,2,0), Vector3d(i+15,2,3), 2.0);
-            geneRoad(Vector3d(i+1,8,0), Vector3d(i+15,8,3), 2.0);
-        }
-    }
-
+    geneWall(6.11, 9.4, 12.3 ,10.0, 2.0, 0.1);
 }
 
 void mapGene(int id)
@@ -301,15 +252,18 @@ void pubGlobalMap(int map_id)
 int main (int argc, char** argv) 
 { 
     ros::init(argc, argv, "globalmap_generator"); 
-    ros::NodeHandle nh; 
+    ros::NodeHandle nh("~"); 
 
-    int map_id;
     nh.param("cloud_resolution", cloud_resolution, 0.07);
     nh.param("map_id", map_id, 1);
+    nh.param("init_x", init_x, 1.0);
+    nh.param("init_y", init_y, 1.0);
+    nh.param("init_z", init_z, 1.0);
 
     global_map_pub      = nh.advertise<sensor_msgs::PointCloud2>("globalmap", 5); 
 
-    // publish 3 times. Insurance.
+    ros::Duration(2).sleep();
+    // publish 3 times. Guarantee to be received
     int t = 3;
     while(t--)
     {

@@ -167,7 +167,7 @@ void AstarPathSearcher::AstarPathSearch(Vector3d start, Vector3d end)
             ros::Time time_2 = ros::Time::now();
             terminatePtr = currentPtr;
             success_flag = true;
-            ROS_WARN("[A*]{sucess}  Time in A*  is %f ms, path cost if %f m", (time_2 - time_1).toSec() * 1000.0, currentPtr -> gScore * (environment->occupancy_map->grid_resolution) );            
+            ROS_WARN("[A*]{sucess}  Time in A*  is %f ms, path length is %f m", (time_2 - time_1).toSec() * 1000.0, currentPtr -> gScore * (environment->occupancy_map->grid_resolution) );            
             return;
         }
         //get the succetion
