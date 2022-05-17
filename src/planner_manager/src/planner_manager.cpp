@@ -106,14 +106,11 @@ void PlannerManager::generateTraj( vector<Vector3d> path )
   initState.col(0)  = path.front();
   initState.col(1)  = odom_vel;
   finalState.col(0) = path.back();
-  initState(2,0) += 0.5;
-  finalState(2,0) += 0.5;
   vector<Vector3d> Q;
   Vector3d wp;
   for( int ind = index_gap ; ind < path_size - 1 ; ind += index_gap ) 
   {
     wp = path[ind];
-    wp(2) += 0.5;
     Q.push_back( wp );
   }
   renderPoints(Q, Vector3d(0.5,0.5,1.0), 0.2, 1);
