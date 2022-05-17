@@ -2379,6 +2379,24 @@ uav_simulator/Utils/cmake_utils/preinstall:
 .PHONY : uav_simulator/Utils/cmake_utils/preinstall
 
 #=============================================================================
+# Directory level rules for directory debug
+
+# Convenience name for "all" pass in the directory.
+debug/all:
+
+.PHONY : debug/all
+
+# Convenience name for "clean" pass in the directory.
+debug/clean:
+
+.PHONY : debug/clean
+
+# Convenience name for "preinstall" pass in the directory.
+debug/preinstall:
+
+.PHONY : debug/preinstall
+
+#=============================================================================
 # Directory level rules for directory uav_simulator/Utils/pose_utils
 
 # Convenience name for "all" pass in the directory.

@@ -105,6 +105,13 @@
 /home/lantern/ROS_workspace/MotionPlanning/build/uav_simulator/Utils/cmake_utils/CMakeFiles/install/local.dir
 /home/lantern/ROS_workspace/MotionPlanning/build/uav_simulator/Utils/cmake_utils/CMakeFiles/rebuild_cache.dir
 /home/lantern/ROS_workspace/MotionPlanning/build/uav_simulator/Utils/cmake_utils/CMakeFiles/install.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/install/strip.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/edit_cache.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/list_install_components.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/test.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/install/local.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/rebuild_cache.dir
+/home/lantern/ROS_workspace/MotionPlanning/build/debug/CMakeFiles/install.dir
 /home/lantern/ROS_workspace/MotionPlanning/build/uav_simulator/Utils/pose_utils/CMakeFiles/install/strip.dir
 /home/lantern/ROS_workspace/MotionPlanning/build/uav_simulator/Utils/pose_utils/CMakeFiles/install/local.dir
 /home/lantern/ROS_workspace/MotionPlanning/build/uav_simulator/Utils/pose_utils/CMakeFiles/test.dir

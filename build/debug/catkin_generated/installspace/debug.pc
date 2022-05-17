@@ -1,0 +1,8 @@
+prefix=/home/lantern/ROS_workspace/MotionPlanning/install
+
+Name: debug
+Description: Description of debug
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

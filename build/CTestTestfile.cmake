@@ -7,6 +7,7 @@
 subdirs("gtest")
 subdirs("uav_simulator/Utils/quadrotor_msgs")
 subdirs("uav_simulator/Utils/cmake_utils")
+subdirs("debug")
 subdirs("uav_simulator/Utils/pose_utils")
 subdirs("globalmap_gene")
 subdirs("map_manager")
