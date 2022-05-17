@@ -1,6 +1,13 @@
 # FastPlanner-Lite
 后端使用minco的FastPlanner全局规划器。代码简洁，供参考学习。
 
+### 依赖
+```
+Eigen 3
+PCL 1.7
+pygame (可选)
+```
+
 ### build and  run
 ```
 catkin_make -DCMAKE_BUILD_TYPE=Release
