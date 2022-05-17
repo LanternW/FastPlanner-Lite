@@ -12,7 +12,7 @@ pygame (可选)
 ```
 catkin_make -DCMAKE_BUILD_TYPE=Release
 ```
-如果报错找不到Polynome.h , 可以手动把两个message文件放进devel/include/planner_manager里。
+如果报错找不到Polynome.h 或PositionCommand.h，应该是编译顺序问题，可以手动把Polynome.h文件放进devel/include/planner_manager里, PositionCommand.h 放进devel/include/quadrotor_msgs里。
 ```
 source devel/setup.bash
 ```
