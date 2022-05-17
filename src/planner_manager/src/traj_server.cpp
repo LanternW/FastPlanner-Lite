@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include "planner_manager/Polynome.h"
-#include "planner_manager/PositionCommand.h"
+// #include "planner_manager/PositionCommand.h"
+#include "quadrotor_msgs/PositionCommand.h"
 #include "planner_algorithm/poly_traj_utils.hpp"
 #include "planner_algorithm/back_end_optimizer.h"
 
@@ -124,7 +125,7 @@ void cmdCallback(const ros::TimerEvent &e)
     ros::Time time_now  = ros::Time::now();
     t_cur               = (time_now - start_time).toSec();
 
-    planner_manager::PositionCommand cmd;
+    quadrotor_msgs::PositionCommand cmd;
     cmd.header.frame_id = "world";
 
     if (t_cur < traj_duration && t_cur >= 0.0)
@@ -180,7 +181,7 @@ int main(int argc, char **argv)
   ros::Subscriber odom_sub      = nh.subscribe("odom", 1, rcvOdomCallBack );
 
   despoint_vis_pub  = nh.advertise<visualization_msgs::Marker>("point/vis", 20); 
-  control_cmd_pub   = nh.advertise<planner_manager::PositionCommand>("controller_cmd", 20); 
+  control_cmd_pub   = nh.advertise<quadrotor_msgs::PositionCommand>("controller_cmd", 20); 
 
   ros::Timer cmd_timer = nh.createTimer(ros::Duration(0.01), cmdCallback);
 

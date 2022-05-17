@@ -6,14 +6,13 @@ project(planner_manager)
 find_package(catkin REQUIRED COMPONENTS
   map_manager
   planner_algorithm
-
+  message_generation
   roscpp
   rospy
   std_msgs
   sensor_msgs
   geometry_msgs
 
-  message_generation
 )
 
 find_package(Eigen3 REQUIRED)
@@ -21,7 +20,7 @@ find_package(PCL 1.7 REQUIRED)
 
 add_message_files(FILES
   Polynome.msg
-  PositionCommand.msg
+  #PositionCommand.msg
 )
 generate_messages(DEPENDENCIES
 	std_msgs
