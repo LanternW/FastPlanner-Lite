@@ -25,6 +25,7 @@ bool   cov_vel    = false;
 bool   cov_color  = false;
 bool   origin       = false;
 bool   isOriginSet  = false;
+int id;
 colvec poseOrigin(6);
 ros::Publisher posePub;
 ros::Publisher pathPub;
@@ -49,6 +50,7 @@ string _frame_id;
 
 void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
+
   if (msg->header.frame_id == string("null"))
     return;
   colvec pose(6);  
@@ -101,7 +103,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   velROS.header.frame_id = string("world");
   velROS.header.stamp = msg->header.stamp;
   velROS.ns = string("velocity");
-  velROS.id = 0;
+  velROS.id = id;
   velROS.type = visualization_msgs::Marker::ARROW;
   velROS.action = visualization_msgs::Marker::ADD;
   velROS.pose.position.x = pose(0);
@@ -170,7 +172,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
     covROS.header.frame_id = string("world");
     covROS.header.stamp = msg->header.stamp;
     covROS.ns = string("covariance");
-    covROS.id = 0;
+    covROS.id = id;
     covROS.type = visualization_msgs::Marker::SPHERE;
     covROS.action = visualization_msgs::Marker::ADD;
     covROS.pose.position.x = pose(0);
@@ -219,7 +221,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
     covVelROS.header.frame_id = string("world");
     covVelROS.header.stamp = msg->header.stamp;
     covVelROS.ns = string("covariance_velocity");
-    covVelROS.id = 0;
+    covVelROS.id = id;
     covVelROS.type = visualization_msgs::Marker::SPHERE;
     covVelROS.action = visualization_msgs::Marker::ADD;
     covVelROS.pose.position.x = pose(0);
@@ -325,7 +327,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   meshROS.header.frame_id = _frame_id;
   meshROS.header.stamp = msg->header.stamp; 
   meshROS.ns = "mesh";
-  meshROS.id = 0;
+  meshROS.id = id;
   meshROS.type = visualization_msgs::Marker::MESH_RESOURCE;
   meshROS.action = visualization_msgs::Marker::ADD;
   meshROS.pose.position.x = msg->pose.pose.position.x;
@@ -403,7 +405,7 @@ void cmd_callback(const quadrotor_msgs::PositionCommand cmd)
   meshROS.header.frame_id = _frame_id;
   meshROS.header.stamp = cmd.header.stamp; 
   meshROS.ns = "mesh";
-  meshROS.id = 0;
+  meshROS.id = id;
   meshROS.type = visualization_msgs::Marker::MESH_RESOURCE;
   meshROS.action = visualization_msgs::Marker::ADD;
   meshROS.pose.position.x = cmd.position.x;
@@ -444,6 +446,7 @@ int main(int argc, char** argv)
   n.param("origin", origin, false);  
   n.param("robot_scale", scale, 2.0);    
   n.param("frame_id",   _frame_id, string("world") );    
+  n.param("id", id, 1);
  
   n.param("cross_config", cross_config, false);    
   n.param("tf45", tf45, false);    

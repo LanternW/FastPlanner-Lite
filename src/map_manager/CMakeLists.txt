@@ -34,10 +34,9 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
 )
 
-#add_executable(PCSmap_node src/PCSmap_node.cpp
-#			    src/PCSmap_manager.cpp)
-#
-#target_link_libraries(PCSmap_node
+# add_executable(resources_node src/ResourcesPool.cpp)
+
+# target_link_libraries(resources_node
 #    ${catkin_LIBRARIES}
 #    ${PCL_INCLUDE_DIRS}
 #    ${EIGEN3_INCLUDE_DIR}

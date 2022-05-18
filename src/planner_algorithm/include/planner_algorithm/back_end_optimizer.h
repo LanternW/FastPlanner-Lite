@@ -1,4 +1,5 @@
 #pragma once
+
 #include <map_manager/PCSmap_manager.h>
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
@@ -7,6 +8,7 @@
 #include <thread>
 
 #include "minco.hpp"
+#include "poly_traj_ext.hpp"
 
 class TrajOpt {
 
@@ -16,6 +18,7 @@ class TrajOpt {
       ros::Publisher debug_pub, debug_wp_pub;
 
       PCSmapManager::Ptr environment;
+      SwarmTrajManager::Ptr swarmtraj_manager;
 
       bool pause_debug = true;
       // # pieces and # key points
@@ -88,9 +91,10 @@ class TrajOpt {
         debug_wp_pub = nh.advertise<visualization_msgs::Marker>("/traj_opt/debug_path_wp", 10);
 
       }
-      void setEnvironment(const PCSmapManager::Ptr& mapPtr)
+      void setEnvironment(const PCSmapManager::Ptr& mapPtr, SwarmTrajManager::Ptr stManager)
       {
-          environment = mapPtr;
+          environment       = mapPtr;
+          swarmtraj_manager = stManager;
       }
       bool generate_traj(const Eigen::MatrixXd& initState,
                          const Eigen::MatrixXd& finalState,
@@ -100,6 +104,13 @@ class TrajOpt {
                          bool keep_result);
 
       void addTimeIntPenalty(double& cost);
+
+      bool grad_cost_swarm(const Eigen::Vector3d& p,
+                           Eigen::Vector3d& grads,
+                           double& costs,
+                           const ros::Time begin_stamp,
+                           const double push_time);
+
       bool grad_cost_p(const Eigen::Vector3d& p,
                        Eigen::Vector3d& gradp,
                        double& costp);

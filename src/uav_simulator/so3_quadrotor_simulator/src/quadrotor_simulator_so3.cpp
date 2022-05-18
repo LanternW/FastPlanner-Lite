@@ -6,6 +6,8 @@
 #include <sensor_msgs/Imu.h>
 #include <uav_utils/geometry_utils.h>
 
+int id;
+
 typedef struct _Control
 {
   double rpm[4];
@@ -219,6 +221,7 @@ main(int argc, char** argv)
   n.param("simulator/init_state_x", _init_x, 0.0);
   n.param("simulator/init_state_y", _init_y, 0.0);
   n.param("simulator/init_state_z", _init_z, 1.0);
+  n.param("id", id, 1);
 
   Eigen::Vector3d position = Eigen::Vector3d(_init_x, _init_y, _init_z);
   quad.setStatePos(position);
@@ -289,6 +292,7 @@ main(int argc, char** argv)
     {
       next_odom_pub_time += odom_pub_duration;
       odom_msg.header.stamp = tnow;
+      odom_msg.pose.covariance[0] = id;
       state                 = quad.getState();
       stateToOdomMsg(state, odom_msg);
       quadToImuMsg(quad, imu);

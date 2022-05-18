@@ -2,22 +2,53 @@
 #include "planner_manager/Polynome.h"
 
 
-void PlannerManager::init(ros::NodeHandle& nh)
+void PlannerManager::init(ros::NodeHandle& nh, PCSmapManager::Ptr map_manager)
 {
-  pcsmap_manager.reset(new PCSmapManager);
-  pcsmap_manager -> init(nh);
-
+  pcsmap_manager = map_manager;
+  swarmtraj_manager.reset(new SwarmTrajManager);
   astar_searcher.reset(new AstarPathSearcher);
   astar_searcher -> init(nh);
-
   minco_traj_optimizer.reset(new TrajOpt);
   minco_traj_optimizer -> setParam(nh);
-  minco_traj_optimizer -> setEnvironment(pcsmap_manager);
+  minco_traj_optimizer -> setEnvironment(pcsmap_manager, swarmtraj_manager);
 
   nh.param("traj_parlength", traj_parlength, 2.0);
 
-  odom_sub      = nh.subscribe("odom", 1, &PlannerManager::odomRcvCallBack, this);
+  traj_server.id = planner_id;
+  traj_server.init(nh);
+
+  odom_sub      = nh.subscribe("odom/"+to_string(planner_id), 1, &PlannerManager::odomRcvCallBack, this);
   target_sub    = nh.subscribe("/goal",1, &PlannerManager::targetRcvCallBack, this);
+  swarmtraj_sub = nh.subscribe("trajectory",3, &PlannerManager::swarmTrajRcvCallBack, this);
+  path_vis_pub  = nh.advertise<visualization_msgs::Marker>("path_vis", 10);
+  traj_vis_pub  = nh.advertise<visualization_msgs::Marker>("traj_vis", 10);
+  point_vis_pub = nh.advertise<visualization_msgs::Marker>("points_vis", 10);
+  traj_pub      = nh.advertise<planner_manager::Polynome>("trajectory",3);
+  rcvmap_signal_sub = nh.subscribe("/rcvmap_signal",1, &PlannerManager::mapRcvCallBack, this);
+  has_odom = false;
+}
+
+void PlannerManager::init(ros::NodeHandle& nh)
+{
+
+  pcsmap_manager.reset(new PCSmapManager);
+  pcsmap_manager -> init(nh);
+
+  swarmtraj_manager.reset(new SwarmTrajManager);
+  astar_searcher.reset(new AstarPathSearcher);
+  astar_searcher -> init(nh);
+  minco_traj_optimizer.reset(new TrajOpt);
+  minco_traj_optimizer -> setParam(nh);
+  minco_traj_optimizer -> setEnvironment(pcsmap_manager, swarmtraj_manager);
+
+  nh.param("traj_parlength", traj_parlength, 2.0);
+
+  traj_server.id = planner_id;
+  traj_server.init(nh);
+
+  odom_sub      = nh.subscribe("odom/"+to_string(planner_id), 1, &PlannerManager::odomRcvCallBack, this);
+  target_sub    = nh.subscribe("/goal",1, &PlannerManager::targetRcvCallBack, this);
+  swarmtraj_sub = nh.subscribe("trajectory",3, &PlannerManager::swarmTrajRcvCallBack, this);
   path_vis_pub  = nh.advertise<visualization_msgs::Marker>("path_vis", 10);
   traj_vis_pub  = nh.advertise<visualization_msgs::Marker>("traj_vis", 10);
   point_vis_pub = nh.advertise<visualization_msgs::Marker>("points_vis", 10);
@@ -31,6 +62,7 @@ void PlannerManager::odomRcvCallBack(const nav_msgs::Odometry& msg)
 {
   recent_odom = msg;
   has_odom = true;
+  traj_server.receiveOdom(recent_odom);
 }
 
 void PlannerManager::mapRcvCallBack(const std_msgs::Empty& msg)
@@ -47,6 +79,7 @@ void PlannerManager::targetRcvCallBack(const geometry_msgs::PoseStamped& msg)
     target_pos(1) = msg.pose.position.y;
     target_pos(2) = msg.pose.position.z;
 
+    target_pos(0) += (planner_id - 1) * 2;
     cout<<"target = " <<target_pos<<endl;
 
     if(has_odom)
@@ -61,6 +94,42 @@ void PlannerManager::targetRcvCallBack(const geometry_msgs::PoseStamped& msg)
         generateTraj(recent_path);
       }
     }
+
+}
+
+void PlannerManager::swarmTrajRcvCallBack(const planner_manager::PolynomeConstPtr msg)
+{
+  int traj_id = msg -> traj_id;
+  if(traj_id == planner_id){ return ;}
+
+  Trajectory trajectory;
+  minco::MinJerkOpt jerkOpt_;
+  // parse pos traj
+  MatrixXd posP(3, msg -> pos_pts.size() - 2);
+  VectorXd T(msg -> t_pts.size());
+  MatrixXd initS, tailS;
+  for (int i = 1; i < msg -> pos_pts.size() - 1 ;i++)
+  {
+    posP(0, i-1) = msg->pos_pts[i].x;
+    posP(1, i-1) = msg->pos_pts[i].y;
+    posP(2, i-1) = msg->pos_pts[i].z;
+  }
+  for (int i=0; i<msg->t_pts.size();i++)
+  {
+    T(i) = msg->t_pts[i];
+  }
+  initS.setZero(3, 3);
+  tailS.setZero(3, 3);
+  initS.col(0) = Vector3d(msg->pos_pts[0].x, msg->pos_pts[0].y, msg->pos_pts[0].z);
+  initS.col(1) = Vector3d(msg->init_v.x, msg->init_v.y, msg->init_v.z);
+  initS.col(2) = Vector3d(msg->init_a.x, msg->init_a.y, msg->init_a.z);
+  tailS.col(0) = Vector3d(msg->pos_pts.back().x, msg->pos_pts.back().y, msg->pos_pts.back().z);
+  tailS.col(1) = Vector3d::Zero();
+  tailS.col(2) = Vector3d::Zero();
+  jerkOpt_.reset(initS, msg->pos_pts.size()-1);
+  jerkOpt_.generate(posP, tailS, T);
+  trajectory    = jerkOpt_.getTraj();
+  swarmtraj_manager -> insertTraj(trajectory, traj_id, msg->start_time);
 
 }
 
@@ -120,6 +189,7 @@ void PlannerManager::generateTraj( vector<Vector3d> path )
   {
     renderTraj(recent_traj);
     publishTraj();
+    cout<<"111"<<endl;
   }
 
 }
@@ -149,9 +219,12 @@ void PlannerManager::publishTraj()
     poly.init_a.y = 0;
     poly.init_a.z = 0;
     poly.start_time = ros::Time::now();
-    poly.traj_id = 1;
-
+    poly.traj_id = planner_id;
     traj_pub.publish(poly);
+
+    //give traj to traj_server
+    traj_server.receiveTraj(recent_traj, poly.start_time);
+
 }
 
 
@@ -165,8 +238,8 @@ void PlannerManager::renderPath( vector<Vector3d> path )
   line_strip.type         = visualization_msgs::Marker::LINE_STRIP;
 
   sphere.action           = line_strip.action           = visualization_msgs::Marker::ADD;
-  sphere.id               = 0;
-  line_strip.id           = 1;
+  sphere.id               = planner_id;
+  line_strip.id           = planner_id + 1000;
 
   sphere.pose.orientation.w   = line_strip.pose.orientation.w  = 1.0;
   sphere.color.r              = line_strip.color.r             = 0.4;
@@ -198,7 +271,7 @@ void PlannerManager::renderTraj( Trajectory traj )
   visualization_msgs::Marker traj_vis;
   traj_vis.header.stamp       = ros::Time::now();
   traj_vis.header.frame_id    = "world";
-  traj_vis.id   = 4;
+  traj_vis.id   = planner_id;
   traj_vis.type = visualization_msgs::Marker::LINE_STRIP;
   traj_vis.scale.x = 0.1;
   traj_vis.scale.y = 0.1;
@@ -210,7 +283,7 @@ void PlannerManager::renderTraj( Trajectory traj )
 
   traj_vis.color.a = 1.0;
   traj_vis.color.r = 1.0;
-  traj_vis.color.g = 1.0;
+  traj_vis.color.g = 1.0 - 0.1 * planner_id;
   traj_vis.color.b = 0.5;
   geometry_msgs::Point pt;
   Eigen::Vector3d pos;
@@ -235,7 +308,7 @@ void PlannerManager::renderPoints(vector<Eigen::Vector3d> pts, Eigen::Vector3d c
 
     sphere.type             = visualization_msgs::Marker::SPHERE_LIST;
     sphere.action           = visualization_msgs::Marker::ADD;
-    sphere.id               = id;
+    sphere.id               = planner_id;
     sphere.pose.orientation.w   = 1.0;
     sphere.color.r              = color(0);
     sphere.color.g              = color(1);

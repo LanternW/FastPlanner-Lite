@@ -5,58 +5,166 @@
 <arg name="init_y" value="1.0" />
 <arg name="init_z" value="1.0" />
 
+<!-- 接入规划的飞机数量 -->
+<arg name="uav_count" value="10" />
+
+
 
 <!-- planner -->
 	<node pkg="planner_manager" name="scf_planner_node" type="scf_planner_node" output="screen">
 
-	  <param name="occupancy_resolution" value="0.2"/>
-	  <param name="sta_threshold"   value="1"/>
-	  <param name="debug_output"   value="false"/>
-	  
-	  <!-- the distance between each neighboring waypoint of MINCO traj initalization -->
-	  <param name="traj_parlength"   value="1.5"/>		
-	  
-	  <!-- number of samples in each traj segment  -->
-	  <param name="optimization/K"     value="8"  		/>
-	  <!-- esdf turcation distance -->
-	  <param name="optimization/pok"   value="1.0"		/>
-	  <!-- UAV Dynamic -->
-	  <param name="optimization/vmax"  value="3.0" 		/>
-	  <param name="optimization/amax"  value="5.0"		/>
-	  <!-- weight -->
-	  <param name="optimization/rhoT"  value="1000.0"	/>
-	  <param name="optimization/rhoP"  value="10000.0"/>
-	  <param name="optimization/rhoV"  value="1000.0"	/>
-	  <param name="optimization/rhoA"  value="1000.0"	/>
-	  
-	  <remap from="~globalmap"     			to="/globalmap" />
-	  <remap from="~globalmap_vis"			to="/globalmap_vis" />
-	  <remap from="~gridmap_vis" 			to="/gridmap_vis" />
-	  <remap from="~voxel_vis"			 	to="/voxel_vis" />
-	  <remap from="~rcvmap_signal"			to="/rcvmap_signal" />
-	  <remap from="~odom"					to="$(arg odom_topic)"/>
+	<param name="uav_count" value="$(arg uav_count)" />
+	<param name="occupancy_resolution" value="0.2"/>
+	<param name="sta_threshold"   value="1"/>
+	<param name="debug_output"   value="false"/>
+	
+	<!-- the distance between each neighboring waypoint of MINCO traj initalization -->
+	<param name="traj_parlength"   value="1.5"/>		
+	
+	<!-- number of samples in each traj segment  -->
+	<param name="optimization/K"     value="8"  		/>
+	<!-- esdf turcation distance -->
+	<param name="optimization/pok"   value="1.0"		/>
+	<!-- UAV Dynamic -->
+	<param name="optimization/vmax"  value="3.0" 		/>
+	<param name="optimization/amax"  value="5.0"		/>
+	<!-- weight -->
+	<param name="optimization/rhoT"  value="1000.0"	/>
+	<param name="optimization/rhoP"  value="10000.0"/>
+	<param name="optimization/rhoV"  value="1000.0"	/>
+	<param name="optimization/rhoA"  value="1000.0"	/>
+	
+	<remap from="~globalmap"     			to="/globalmap" />
+	<remap from="~globalmap_vis"			to="/globalmap_vis" />
+	<remap from="~gridmap_vis" 			to="/gridmap_vis" />
+	<remap from="~voxel_vis"			 	to="/voxel_vis" />
+	<remap from="~rcvmap_signal"			to="/rcvmap_signal" />
+	<remap from="~point/vis"  			to="/vis_p" />
 
+	<remap from="~odom/1"					to="$(arg odom_topic)/1"/>
+	<remap from="~controller_cmd/1"  		to="/planning/pos_cmd/1" />
 
-	  <remap from="~trajectory"			to="/trajectory" />
-	  
+	<remap from="~odom/2"					to="$(arg odom_topic)/2"/>
+	<remap from="~controller_cmd/2"  		to="/planning/pos_cmd/2" />
+
+	<remap from="~odom/3"					to="$(arg odom_topic)/3"/>
+	<remap from="~controller_cmd/3"  		to="/planning/pos_cmd/3" />
+
+	<remap from="~odom/4"					to="$(arg odom_topic)/4"/>
+	<remap from="~controller_cmd/4"  		to="/planning/pos_cmd/4" />
+
+	<remap from="~odom/5"					to="$(arg odom_topic)/5"/>
+	<remap from="~controller_cmd/5"  		to="/planning/pos_cmd/5" />
+
+	<remap from="~odom/6"					to="$(arg odom_topic)/6"/>
+	<remap from="~controller_cmd/6"  		to="/planning/pos_cmd/6" />
+
+	<remap from="~odom/7"					to="$(arg odom_topic)/7"/>
+	<remap from="~controller_cmd/7"  		to="/planning/pos_cmd/7" />
+
+	<remap from="~odom/8"					to="$(arg odom_topic)/8"/>
+	<remap from="~controller_cmd/8"  		to="/planning/pos_cmd/8" />
+
+	<remap from="~odom/9"					to="$(arg odom_topic)/9"/>
+	<remap from="~controller_cmd/9"  		to="/planning/pos_cmd/9" />
+
+	<remap from="~odom/10"					to="$(arg odom_topic)/10"/>
+	<remap from="~controller_cmd/10"  		to="/planning/pos_cmd/10" />
+
+	<remap from="~trajectory"			to="/trajectory" />
+	
 	</node>
 
-<!-- trajectory server -->
-	<node pkg="planner_manager" name="traj_server" type="traj_server" output="screen">
-
-	  <remap from="~trajectory_topic"     	to="/trajectory" />
-	  <remap from="~odom" 					to="$(arg odom_topic)" />
-	  <remap from="~point/vis"  			to="/vis_p" />
-	  <remap from="~controller_cmd"  		to="/planning/pos_cmd" />
-
-	</node>
 
 <!-- use simulator -->
 	<include file="$(find planner_manager)/launch/simulator.xml">
-		<arg name="odometry_topic" value="$(arg odom_topic)" />
+		<arg name="odometry_topic" value="$(arg odom_topic)/1" />
+		<arg name="uav_id" value="1" />
 		<arg name="init_x" value="$(arg init_x)" />
 		<arg name="init_y" value="$(arg init_y)" />
 		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/1" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/2" />
+		<arg name="uav_id" value="2" />
+		<arg name="init_x" value="3" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/2" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/3" />
+		<arg name="uav_id" value="3" />
+		<arg name="init_x" value="5" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/3" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/4" />
+		<arg name="uav_id" value="4" />
+		<arg name="init_x" value="7" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/4" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/5" />
+		<arg name="uav_id" value="5" />
+		<arg name="init_x" value="9" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/5" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/6" />
+		<arg name="uav_id" value="6" />
+		<arg name="init_x" value="11" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/6" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/7" />
+		<arg name="uav_id" value="7" />
+		<arg name="init_x" value="13" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/7" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/8" />
+		<arg name="uav_id" value="8" />
+		<arg name="init_x" value="15" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/8" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/9" />
+		<arg name="uav_id" value="9" />
+		<arg name="init_x" value="17" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/9" />
+	</include>
+
+	<include file="$(find planner_manager)/launch/simulator.xml">
+		<arg name="odometry_topic" value="$(arg odom_topic)/10" />
+		<arg name="uav_id" value="10" />
+		<arg name="init_x" value="19" />
+		<arg name="init_y" value="$(arg init_y)" />
+		<arg name="init_z" value="$(arg init_z)" />
+		<arg name="controlcmd_topic" value="/planning/pos_cmd/10" />
 	</include>
 
 <!-- use program code globalmap generator -->

@@ -122,13 +122,13 @@ Visualization Manager:
       Use rainbow: true
       Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /scf_planner_node/path_vis
       Name: Path
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /scf_planner_node/traj_vis
@@ -202,9 +202,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 2944.075927734375
+      Max Intensity: 5.966573715209961
       Min Color: 0; 0; 0
-      Min Intensity: -1209.1463623046875
+      Min Intensity: 0
       Name: ESDF_VIS
       Position Transformer: XYZ
       Queue Size: 10
@@ -217,14 +217,90 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
-    - Class: rviz/Marker
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_1/robot
+          Name: UAV1
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_2/robot
+          Name: UAV2
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_3/robot
+          Name: UAV3
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_4/robot
+          Name: UAV4
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_5/robot
+          Name: UAV5
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_6/robot
+          Name: UAV6
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_7/robot
+          Name: UAV7
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_9/robot
+          Name: UAV9
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_8/robot
+          Name: UAV8
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_10/robot
+          Name: UAV10
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
       Enabled: true
-      Marker Topic: /odom_visualization/robot
-      Name: UAV
-      Namespaces:
-        mesh: true
-      Queue Size: 100
-      Value: true
+      Name: UAV_Models
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -255,25 +331,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 20.31792449951172
+      Distance: 77.46121215820312
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 11.406551361083984
-        Y: 5.782912254333496
-        Z: -1.8603572845458984
+        X: 14.548965454101562
+        Y: 9.575778007507324
+        Z: -20.611886978149414
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7797967791557312
+      Pitch: 1.3897966146469116
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.548104763031006
+      Yaw: 5.049932956695557
     Saved: ~
 Window Geometry:
   Displays:

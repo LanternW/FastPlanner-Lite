@@ -45,7 +45,8 @@ include_directories(
 )
 
 add_executable(scf_planner_node src/planner_manager_node.cpp 
-                                src/planner_manager.cpp )
+                                src/planner_manager.cpp
+                                src/traj_server.cpp )
 
 target_link_libraries(scf_planner_node
     ${catkin_LIBRARIES}
@@ -56,5 +57,5 @@ target_link_libraries(scf_planner_node
     planner_algorithm_lib
 )
 
-add_executable(traj_server src/traj_server.cpp)
-target_link_libraries(traj_server ${catkin_LIBRARIES})
+# add_executable(traj_server src/traj_server.cpp)
+# target_link_libraries(traj_server ${catkin_LIBRARIES})

@@ -3,6 +3,8 @@
 
 
 void TrajOpt::addTimeIntPenalty(double& cost) {
+  ros::Time begin_stamp = ros::Time::now();
+  double push_time = 0;
   Eigen::Vector3d pos, vel, acc, jer;
   Eigen::Vector3d grad_tmp, grad_tmp_p, grad_tmp_v ;
   double cost_tmp, cost_tmp_p, cost_tmp_v;
@@ -64,7 +66,17 @@ void TrajOpt::addTimeIntPenalty(double& cost) {
         cost += omg * step * cost_tmp;
       }
 
+      if (grad_cost_swarm(pos, grad_tmp, cost_tmp, begin_stamp,push_time)) {
+        gradViolaPc = beta0 * grad_tmp.transpose();
+        gradViolaPt = alpha * grad_tmp.dot(vel);
+        (this->jerkOpt).gdC.block<6, 3>(i * 6, 0) += omg * step * gradViolaPc;
+        (this->jerkOpt).gdT(i) += omg * (cost_tmp / K + step * gradViolaPt);
+        cost += omg * step * cost_tmp;
+      }
+    
+
       s1 += step;
+      push_time += step;
     }
   }
 }
@@ -273,6 +285,49 @@ bool TrajOpt::generate_traj(const Eigen::MatrixXd& initState,
   }
   
   return true;
+}
+
+bool TrajOpt::grad_cost_swarm(const Eigen::Vector3d& p,
+                           Eigen::Vector3d& grads,
+                           double& costs,
+                           const ros::Time begin_stamp,
+                           const double push_time)
+{
+  double begin_time = begin_stamp.toSec();
+  double swarm_begin_time;
+  double swarm_tick;
+  double swarm_pok = 1.2 * pok;
+  Vector3d swarm_pos;
+  double dist_swarm;
+  costs = 0;
+  grads = Vector3d::Zero();
+  for(int i = 0 ; i < swarmtraj_manager->trajs.size(); i++)
+  {
+    swarm_begin_time = swarmtraj_manager->trajs[i]->start_time.toSec();
+    swarm_tick = push_time + (begin_time - swarm_begin_time);
+
+    if(swarm_tick <= 0 ) {continue;}
+    if(swarm_tick > swarmtraj_manager->trajs[i]->trajectory.getTotalDuration() ){
+      swarm_pos = swarmtraj_manager->trajs[i]->trajectory.getPos( swarmtraj_manager->trajs[i]->trajectory.getTotalDuration() );
+    }
+    else{
+      swarm_pos = swarmtraj_manager->trajs[i]->trajectory.getPos(swarm_tick);
+    }
+
+    dist_swarm = (p-swarm_pos).squaredNorm();
+    if (dist_swarm > 6*swarm_pok*swarm_pok)
+    {
+      continue;
+    }
+    else
+    {
+      double ppen = 6*swarm_pok*swarm_pok - dist_swarm;
+      costs += rhoP_tmp_ * pow(ppen, 3);
+      grads += rhoP_tmp_ * 6 * pow(ppen, 2) * (swarm_pos - p);
+    }
+  }
+  return true;
+
 }
 
 bool TrajOpt::grad_cost_p(const Eigen::Vector3d& p,
