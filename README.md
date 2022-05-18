@@ -22,6 +22,8 @@ roslaunch planner_manager run_in_sim.launch
 ```
 使用3D Nav Goal选择目标点。
 修改run_in_sim.launch的uav_count参数，可以修改接入规划的飞机数量。
+
+map1较大，如果电脑性能弱，run_in_sim.launch 172行map_id改为2试试，这幅地图更小。
 ### ESDF可视化工具
 ```
 rosrun debug grad_viewer.py
