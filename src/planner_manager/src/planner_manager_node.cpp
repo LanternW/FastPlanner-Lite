@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   nh.param("uav_count",uav_count,1);
   vector<PlannerManager::Ptr> scf_planners;
 
-// 所有飞机共享主机的地图对象
+// 所有飞机共享主机的地图对象，适用于仿真，节约内存
 #ifdef SHARED_GLOBALMAP
   shared_globalmap_manager.reset(new PCSmapManager);
   shared_globalmap_manager -> init(nh);
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     manager -> init(nh, shared_globalmap_manager);
     scf_planners.push_back(manager);
   }
-// 每一架飞机独立存储地图
+// 每一架飞机独立存储地图,适用于真机分布式工作
 #else
   for(int i = 0 ; i < uav_count; i++)
   {
