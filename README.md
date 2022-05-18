@@ -19,6 +19,7 @@ source devel/setup.bash
 ```
 roslaunch planner_manager run_in_sim.launch
 ```
+使用3D Nav Goal选择目标点
 ### ESDF可视化工具
 ```
 rosrun debug grad_viewer.py
